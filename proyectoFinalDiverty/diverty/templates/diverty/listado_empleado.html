@@ -1,0 +1,76 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %} listado de empleados {% endblock %}
+
+{% block js %}
+<script>
+    function eliminarEmpleado(id) {
+        Swal.fire({
+            "title": "¿Estás seguro?",
+            "text": "esta accion no se puede deshacer",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "no,cancelar",
+            "confirmButtonText": "Sí,eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#F44339"
+
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_empleado/" + id + "/"
+
+                }
+
+            })
+    }
+
+
+</script>
+{% endblock %}
+{% block contenedor %}
+<main>
+    <h1 class="center-align">Listado de empleados </h1>
+    <a class="boton-crear-registro" href="{% url 'diverty:guardar_empleado' %}">
+        Crear empleado +</a>
+    {% if registros_tablas %}
+    <table class="stripped highlight centered responsive-table ">
+        <thead>
+            <tr class="grey lighten-2">
+                <th>Id empleado</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Cedula</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <br>
+        <tbody>
+            {% for registro in registros_tablas %}
+            <tr>
+                <td>{{ registro.id_empleado }}</td>
+                <td>{{ registro.nombre }}</td>
+                <td>{{ registro.apellido }}</td>
+                <td>{{ registro.identificacion }}</td>
+                <td>{{ registro.correo }}</td>
+                <td>
+                    <a onclick="eliminarEmpleado ({{registro.id_empleado}})" href="#"
+                        class="material-icons  red-text  ">
+                        delete
+                    </a>
+                    <a href="{% url 'diverty:modificar_empleado' registro.id_empleado %}"
+                        class="material-icons yellow-text text-darken-4">
+                        mode_edit
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% else %}
+    No hay datos
+    {% endif %}
+    {% include 'diverty/paginator.html' %}
+</main>
+{% endblock %}

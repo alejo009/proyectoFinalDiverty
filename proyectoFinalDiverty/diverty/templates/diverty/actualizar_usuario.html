@@ -1,0 +1,57 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}registro {% endblock %}
+{% block contenedor %}
+<!--Aqui va el div padre-->
+<div class="contenedor-principal">
+    <div class="section container ">
+        <h1 class="center-align bienvenido">Bienvenido!!!</h1>
+        <div class="row card-panel">
+            <form class="col s12" action="{% url 'diverty:editar_usuario' %}" method="POST"
+                onsubmit="return validarPasswordRegistro();" id="form">
+                {% csrf_token %}
+                <div class="row ">
+                    <div class="input-field col s9">
+                    <input type="hidden" name="id" value="{{ datos.id }}"  readonly="" />
+                    </div>
+                    <div class="input-field col s9">
+                        <span class="prefix">
+                            <img src="{% static 'diverty/img/icono_persona.svg' %}" alt="icono de persona,campo nombre">
+                        </span>
+                        <input type="text" name="usuario" value="{{ datos.usuario }}" id="nombre_usuario" class="validate" required>
+                        <span class="helper-text " data-error="Ingrese un  nombre valido"></span>
+                        <label for="nombre_usuario" class="black-text ">Nombre</label>
+                    </div>
+                    <div class="input-field col s9">
+                        <span class="prefix">
+                            <img src="{% static 'diverty/img/icono_email_formulario.svg' %}"
+                                alt="icono de email,campo de correo electronico">
+                        </span>
+                        <input type="email" name="email" value="{{ datos.correo }}" id="email_usuario" class="validate" required>
+                        <span id="warning_email" class="helper-text " data-error="Ingrese un email valido"></span>
+                        <label for="email_usuario" class="black-text">Email</label>
+                    </div>
+                   
+                    <div class="input-field col s9">
+                        <span class="prefix">
+                            <img src="{% static 'diverty/img/llave.svg' %}" alt="icono de llave,campo de contraseña">
+                        </span>
+                        <select name="rol_tipo_usuario"required>
+                            <option  value="1" {% if datos.rol == 1 %} selected {% endif %}>Administrador</option>
+                            <option  value="2" {% if datos.rol == 2 %}selected {% endif %}>Empleado</option>
+                            <option  value="3" {% if datos.rol == 3 %}selected {% endif %}>cliente</option>
+                          
+                            
+                         
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="input-field col s4">
+                    <button class="btn " type="submit">Actualizar</button>
+                  
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

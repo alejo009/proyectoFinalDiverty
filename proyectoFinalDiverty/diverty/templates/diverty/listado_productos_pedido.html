@@ -1,0 +1,65 @@
+{% extends 'diverty/base.html' %}
+
+{% load static %}
+{% block js %}
+<script>
+  function eliminarDetalles(id) {
+    Swal.fire({
+      "title": "Estás seguro?",
+      "text": "esta accion no se puede deshacer",
+      "icon": "question",
+      "showCancelButton": true,
+      "cancelButtonText": "no,cancelar",
+      "confirmButtonText": "Sí,eliminar",
+      "reverseButtons": true,
+      "confirmButtonColor": "#F44339"
+    })
+      .then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/eliminar_detalles/" + id + "/"
+
+        }
+
+      })
+  }
+</script>
+{% endblock %}
+{% block contenedor %}
+<main>
+    <h1 class="center-align">Detalles de Pedidos</h1>
+    {% if registros_tablas %}
+    <table class="stripped highlight centered responsive-table ">
+        <thead>
+            <tr class="grey lighten-2">
+                <th>Pedido</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+                
+            </tr>
+        </thead>
+        <br>
+        {% for registros in registros_tablas %}
+        <tbody>
+            <tr>
+                <td>{{ registros.pedido }}</td>
+                <td>{{ registros.producto }}</td>
+                <td>{{ registros.cantidad }}</td>
+                <td>{{ registros.precio }}</td>
+                <td><a onclick="eliminarDetalles ({{ registros.id }})" href="#" class="material-icons  red-text  ">
+                    delete
+                  </a></td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    No hay datos
+    {% endif %}
+    {% include 'diverty/paginator.html' %}
+</main>
+
+
+{% endblock %}

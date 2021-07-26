@@ -1,0 +1,40 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}login {% endblock %}
+{% block contenedor %}
+<!--Aqui va el div padre-->
+<div class="contenedor-principal">
+  <div class="section container ">
+    <h1 class="center-align  bienvenido">Bienvenido!!!</h1>
+    <div class="row card-panel">
+      <form class="col s12" action="{% url 'diverty:login' %}" method="POST"
+        onsubmit="return validarPasswordRegistro();">
+        {% csrf_token %}
+        <div class="row ">
+          <div class="input-field col s9">
+            <span class="prefix">
+              <img src="{% static 'diverty/img/icono_email_formulario.svg' %}"
+                alt="icono de email,campo de correo electronico">
+            </span>
+            <input type="email" id="email_usuario" name="correo" class="validate">
+            <span class="helper-text " data-error="Ingrese un correo valido"></span>
+            <label for="email_usuario" class="black-text">Email</label>
+          </div>
+          <div class="input-field col s9">
+            <span class="prefix">
+              <img src="{% static 'diverty/img/llave.svg' %}" alt="icono de llave,campo de contraseña">
+            </span>
+            <input type="password" id="contraseña_usuario" name="contraseña" class="validate" >
+            <span class="helper-text " data-error="Ingrese una contraseña valida"></span>
+            <label for="contraseña_usuario" class="black-text">Contraseña</label>
+          </div>
+          <div class="input-field col s4">
+            <button class="btn  waves-light" type="submit"> Iniciar Sesion</button>
+            <a class="black-text link_register" href="{% url 'diverty:formulario_register' %}">No tienes una cuenta?
+              Registrate aqui!</a>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

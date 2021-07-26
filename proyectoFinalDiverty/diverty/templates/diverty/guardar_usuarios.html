@@ -1,0 +1,69 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}registro {% endblock %}
+{% block contenedor %}
+<!--Aqui va el div padre-->
+<div class="contenedor-principal">
+    <div class="section container ">
+        <h1 class="center-align bienvenido">Bienvenido!!!</h1>
+        <div class="row card-panel">
+            <form class="col s12" action="{% url 'diverty:guardar_usuario' %}" method="POST"
+                onsubmit="return validarPasswordRegistro();" id="form">
+                {% csrf_token %}
+                <div class="row ">
+                    <div class="input-field col s9">
+                        <span class="prefix">
+                            <img src="{% static 'diverty/img/icono_persona.svg' %}" alt="icono de persona,campo nombre">
+                        </span>
+                        <input type="text" name="usuario" id="nombre_usuario" class="validate" required>
+                        <span class="helper-text " data-error="Ingrese un  nombre valido"></span>
+                        <label for="nombre_usuario" class="black-text ">Nombre</label>
+                    </div>
+                    <div class="input-field col s9">
+                        <span class="prefix">
+                            <img src="{% static 'diverty/img/icono_email_formulario.svg' %}"
+                                alt="icono de email,campo de correo electronico">
+                        </span>
+                        <input type="email" name="email" id="email_usuario" class="validate" required>
+                        <span id="warning_email" class="helper-text " data-error="Ingrese un email valido"></span>
+                        <label for="email_usuario" class="black-text">Email</label>
+                    </div>
+                    <div class="input-field col s9">
+                        <span class="prefix">
+                            <img src="{% static 'diverty/img/llave.svg' %}" alt="icono de llave,campo de contraseña">
+                        </span>
+                        <input type="password" name="clave" id="clave" class="validate" required>
+                        <span id="warning_contra" class="helper-text "
+                            data-error="Ingrese una contraseña valida"></span>
+                        <label for="clave" class="black-text">Contraseña</label>
+                    </div>
+                    <div class="input-field col s9">
+                        <span class="prefix">
+                            <img src="{% static 'diverty/img/llave.svg' %}" alt="icono de llave,campo de contraseña">
+                        </span>
+                        <input type="password" name="clave2" id="clave2" class="validate" required>
+                        <span class="helper-text " data-error="Ingrese una contraseña valida"></span>
+                        <label for="clave2" class="black-text">Repita su contraseña </label>
+                    </div>
+                    <div class="input-field col s9">
+                        <span class="prefix">
+                            <img src="{% static 'diverty/img/llave.svg' %}" alt="icono de llave,campo de contraseña">
+                        </span>
+                        <select  name="roles"  required>
+                            <option  value=""  >Seleccione su rol </option>
+                            <option value="1">Adminstrador</option>
+                            <option value="2">Empleado</option>
+                            <option value="3">cliente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-field col s4">
+                    <button class="btn " type="submit">Registrarse</button>
+                    <a class="black-text link_login" href="{% url 'diverty:formulario_login' %}">Ya tienes una cuenta?
+                        Logoueate aqui!</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}listado de reservas {% endblock%}
+{% block js %}
+<script>
+    function eliminarReservas(id) {
+        Swal.fire({
+            "title": "¿Estás seguro?",
+            "text": "Esta accion no se puede deshacer",
+            "icon": "warning",
+            "showCancelButton": true,
+            "cancelButtonText": "no,cancelar",
+            "confirmButtonText": "Sí,eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#F44339"
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_reservas/" + id + "/"
+                }
+            })
+    }
+</script>
+{% endblock %}
+<!--Tabla-->
+{% block contenedor %}
+<main>
+    <h1 class="center-align">Listado de reservas</h1>
+    <a class="boton-crear-registro" href="{% url 'diverty:guardar_reservas' %}">Crear reserva +</a>
+    {% if registros_tablas %}
+    <table class="stripped highlight centered responsive-table ">
+        <thead>
+            <tr class="grey lighten-2">
+                <th>Id Reserva</th>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Atracciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <br>
+        {% for registros in registros_tablas %}
+        <tbody>
+            <tr>
+                <td>{{ registros.id_reserva }}</td>
+                <td>{{ registros.nombre }}</td>
+                <td>{{ registros.fecha }}</td>
+                <td>{{ registros.atracciones_reservas }}</td>
+                <td>
+                    <a onclick="eliminarReservas ({{registros.id_reserva}})" href="#"
+                        class="material-icons  red-text  ">
+                        delete
+                    </a>
+                    <a href="{% url 'diverty:modificar_reservas' registros.id_reserva %}"
+                        class="material-icons yellow-text text-darken-4">
+                        mode_edit
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    No hay datos
+    {% endif %}
+    {% include 'diverty/paginator.html' %}
+</main>
+{% endblock %}

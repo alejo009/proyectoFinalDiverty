@@ -1,0 +1,67 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}listado de usuarios {% endblock %}
+{% block js %}
+<script>
+    function eliminarUsuarios(id) {
+        Swal.fire({
+            "title": "Estás seguro?",
+            "text": "esta accion no se puede deshacer",
+            "icon": "warning",
+            "showCancelButton": true,
+            "cancelButtonText": "No,cancelar",
+            "confirmButtonText": "Si,eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#F44339"
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_usuario/" + id + "/"
+                }
+            })
+    }
+</script>
+{% endblock %}
+{% block contenedor %}
+<main>
+    <h1 class="center-align">Lista de usuarios </h1>
+    <a class="boton-crear-registro" href="{% url 'diverty:form_usuario' %}">
+        Crear Usuarios +</a>
+    {% if registros_tablas %}
+    <table class="stripped highlight centered responsive-table ">
+        <thead>
+            <tr class="grey lighten-2">
+                <th>Id</th>
+                <th>Usuario</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <br>
+        <tbody>
+            {% for registro in registros_tablas %}
+            <tr>
+                <td>{{ registro.id }}</td>
+                <td>{{ registro.usuario }}</td>
+                <td>{{ registro.correo }}</td>
+                <td>{{ registro.get_rol_display}}</td>
+                <td>
+                    <a  href="#" onclick="eliminarUsuarios({{registro.id}})" class="material-icons  red-text  ">
+                        delete
+                    </a>
+                
+                    <a href="{% url 'diverty:actualizar_usuario' registro.id %}"class="material-icons yellow-text text-darken-4">
+                        mode_edit
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% else %}
+    No hay datos aun
+    {% endif %}
+    {% include 'diverty/paginator.html' %}
+</main>
+{% endblock %}

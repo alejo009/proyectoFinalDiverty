@@ -1,0 +1,44 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block titulo %}Tienda {% endblock %}
+{% block contenedor %}
+<!--Productos-->
+<div class="contenedor-productos grid-productos ">
+  {% for productos in datos %}
+  <article class="entrada-productos">
+    <img
+      src="{{ productos.foto.url }}">
+    <span class="titulo-productos">{{ productos.nombre_boleta_producto }}</span>
+    <hr>
+    {% if productos.stock > 0 %}
+
+    <input  type="number"  class="input-carrito" id="{{ productos.codigo_producto }}"  max="{{ productos.stock }}"  value="1" size="2"required aria-disabled="true">
+    <a href="javascript:agregarCarrito('{% url 'diverty:agregar_carrito' productos.codigo_producto %}','{{ productos.codigo_producto }}')">Añadir al carrito</a>
+    {% else %}
+    <span>Producto agotado</span>
+    {% endif %}
+    {% if productos.descuento %}
+      {% if productos.descuento.precio == productos.precio %}
+      <p class="precio-producto">0</p>
+      {% elif productos.precio < productos.descuento.precio %}
+      <del><p class="precio-producto">$ {{  productos.precio|intcomma }}</p></del>
+      <p class="precio-producto">0</p>
+      {% else %}
+      <del><p class="precio-producto">$ {{  productos.precio|intcomma }}</p></del>
+      <ins><p class="precio-producto">$ {{  productos.descuento.precio|intcomma }}</p></ins>
+    
+      {% endif %}
+
+
+    
+    {% else %}
+    <p class="precio-producto">$ {{  productos.precio|intcomma }}</p>
+    {% endif %}
+    
+  </article>
+  {% endfor %}
+
+  
+</div>
+{% endblock %}

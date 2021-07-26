@@ -1,0 +1,65 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}Listado avisos {% endblock %}
+{% block js %}
+
+<script>
+    function eliminarAviso(id) {
+        Swal.fire({
+            "title": "Estás seguro?",
+            "text": "esta accion no se puede deshacer",
+            "icon": "warning",
+            "showCancelButton": true,
+            "cancelButtonText": "No,cancelar",
+            "confirmButtonText": "Si,eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#F44339"
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_aviso/" + id + "/"
+                }
+            })
+    }
+</script>
+{% endblock %}
+{% block contenedor %}
+<main>
+    <h1 class="center-align">Listado de clientes </h1>
+    <a class="boton-crear-registro" href="{% url 'diverty:guardar_aviso' %}">
+        Crear Avisos +</a>
+    {% if registros_tablas %}
+    <table class="stripped highlight centered responsive-table ">
+        <thead>
+            <tr class="grey lighten-2">
+                <th>Id aviso</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <br>
+        <tbody>
+            {% for registro in registros_tablas %}
+            <tr>
+                <td>{{ registro.id_aviso }}</td>
+                <td>{{ registro.nombre | title }}</td>
+                
+                <td>
+                    <a href="#" onclick="eliminarAviso ({{ registro.id_aviso }})" class="material-icons  red-text  ">
+                        delete
+                    </a>
+                    <a href="{% url 'diverty:modificar_aviso' registro.id_aviso %}"
+                        class="material-icons yellow-text text-darken-4">
+                        mode_edit
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% else %}
+    No hay datos aun
+    {% endif %}
+    {% include 'diverty/paginator.html' %}
+</main>
+{% endblock %}

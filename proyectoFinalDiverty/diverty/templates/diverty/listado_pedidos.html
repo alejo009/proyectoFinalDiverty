@@ -1,0 +1,82 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}listado de empleados {% endblock %}
+{% block js %}
+<script>
+  function eliminarPedidos(id) {
+    Swal.fire({
+      "title": "Estás seguro?",
+      "text": "esta accion no se puede deshacer",
+      "icon": "question",
+      "showCancelButton": true,
+      "cancelButtonText": "no,cancelar",
+      "confirmButtonText": "Sí,eliminar",
+      "reverseButtons": true,
+      "confirmButtonColor": "#F44339"
+    })
+      .then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/eliminar_pedidos/" + id + "/"
+
+        }
+
+      })
+  }
+</script>
+{% endblock %}
+
+
+{% block contenedor %}
+<main>
+    <h1 class="center-align">Listado de Pedidos</h1>
+    <a class="boton-crear-registro" href="{% url 'diverty:guardar_pedidos' %}">
+        Crear pedido +</a>
+
+    {% if registros_tablas %}
+    <table class="stripped highlight centered responsive-table ">
+        <thead>
+            <tr class="grey lighten-2">
+              
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Direccion</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+                
+            </tr>
+        </thead>
+        <br>
+        {% for registros in registros_tablas %}
+        <tbody>
+            <tr>
+                <td>{{ registros.cliente }}</td>
+                <td>{{ registros.fecha }}</td>
+                <td>{{ registros.direccion_de_envio }}</td>
+                <td>{{ registros.get_estado_display }}</td>
+             
+                
+                <td>
+                    <a  href="{% url 'diverty:listar_productos_del_pedido'  %}"
+                        class="material-icons black-text ">
+                        visibility
+                    </a>
+                    <a href="{% url 'diverty:editar_pedidos' registros.id %}"
+                        class="material-icons yellow-text text-darken-4">
+                        mode_edit
+                    </a>
+                    <a onclick="eliminarPedidos ({{ registros.id }})" href="#" class="material-icons  red-text  ">
+                        delete
+                      </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    No hay datos
+    {% endif %}
+    {% include 'diverty/paginator.html' %}
+</main>
+
+
+{% endblock %}

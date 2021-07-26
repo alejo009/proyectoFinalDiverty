@@ -1,0 +1,4 @@
+django==3.2.4
+pip
+django-materializecss-form
+pillow

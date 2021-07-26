@@ -1,0 +1,118 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}Tienda {% endblock %}
+{% load humanize %}
+{% block js %}
+<script>
+  function eliminarItems(id) {
+    Swal.fire({
+      "title": "Estás seguro?",
+      "text": "esta accion no se puede deshacer",
+      "icon": "warning",
+      "showCancelButton": true,
+      "cancelButtonText": "No,cancelar",
+      "confirmButtonText": "Si,eliminar",
+      "reverseButtons": true,
+      "confirmButtonColor": "#F44339"
+    })
+      .then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/quitar_producto/" + id + "/"
+        }
+      })
+  }
+</script>
+{% endblock %}
+{% block contenedor %}
+{% if datos or request.session.carrito %}
+<div class="col s12 m7">
+  <div class="card horizontal card-carrito">
+    <div class="card-stacked">
+      <div class="card-content ">
+        <a class="boton-seguir-comprando" href="{% url 'diverty:tienda' %}"> &#x21a9; Seguir comprando</a>
+      </div>
+      <div class="card-action card-alto-producto">
+        <span class="cantidad-productos-carrito">Cantidad de productos :{{ request.session.bolsa }}</span>
+        <span class="total-productos-carrito" id="total_carrito">Total: {{ total|intcomma }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col s12 m7">
+  <div class="card horizontal card-carrito">
+    <div class="card-stacked">
+      <div class="card-content">
+        <table class="stripped highlight centered responsive-table ">
+          <thead>
+
+            <tr class="grey lighten-2">
+              <th>Productos</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+              <th>Subtotal</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <br>
+          <tbody>
+            {% for producto in datos %}
+            <tr>
+              <td><img class="imagen-producto" src="{{ producto.foto.url }}" alt="{{ producto.productos }}"><span>
+                  <p>{{ producto.nombre_boleta_producto }}</p>
+              </td>
+              <td><input type="text" value="{{ producto.cantidad }}" name="cantidad" size="3"
+              
+              
+                  onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;" onpaste="return false"
+                  
+                  oninput="editarCantidadCarrito(this.value, '{{ producto.productos }}', {{ producto.precio }}, '{{ forloop.counter }}', '{% url 'diverty:editar_carrito' '0' 0 %}');"
+                  min="1" class="input-carrito " required>
+               
+                <br>
+                <span id="txt" class="red-text darken-2"></span>
+              </td>
+              <td>${{ producto.precio|intcomma }}</td>
+
+              <td id="cambio_subtotal_{{ producto.productos }}">${{ producto.subtotal|intcomma }}
+
+              </td>
+              <td>
+                <input type="button" id="s_{{ forloop.counter }}" value="{{ producto.subtotal }}"
+                  style="display: none;">
+                  <input type="button" id="descuento" value="{{ producto.descuento }}"
+                  style="display: none;">
+                
+              
+                <a href="#" onclick="eliminarItems({{producto.productos}})" role="button"
+                  class="material-icons  red-text ">
+                  delete
+                </a>
+              </td>
+
+            </tr>
+          </tbody>
+          {% endfor %}
+        </table>
+        {% else %}
+        No hay datos aun
+        {% endif %}
+        <form class="col s12" action="{% url 'diverty:guardar_pedido' %}" method="POST" onsubmit="guardarPedido(event)">
+          {% csrf_token %}
+          <div class="input-field col s9 ">
+            <span class="prefix">
+              <img src="{% static 'diverty/img/icono_persona.svg' %}" alt="icono de persona,campo nombre">
+            </span>
+            <input type="text" value="" name="dir" id="direccion_envio" class="validate" required>
+            <span class="helper-text " data-error="Ingrese una  direccion valida"></span>
+            <label for="direccion_envio" class="black-text ">Direccion de envio</label>
+          </div>
+          <div class="input-field col s4">
+            <button id="enviar" class="btn " type="submit">Continuar con pedido</button>
+            <a class="btn" href="{% url 'diverty:limpiar_carrito' %}" type="button">Limpiar carrito</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}Modificar clientes {% endblock %}
+
+{% block contenedor %}
+{% load materializecss %}
+<div class="section container">
+  <h1 class="center-align black-text">Modificar clientes</h1>
+  <div class="row">
+    <form class="col s12" method="POST" action="">
+      {% csrf_token %}
+      <div class="row card-panel">
+        {{ form| materializecss }}
+        <a class="btn " href="{% url 'diverty:listar_clientes' %}">Cancelar</a>
+        &nbsp;
+        <button type="submit" value="Editar" class="btn">Editar</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

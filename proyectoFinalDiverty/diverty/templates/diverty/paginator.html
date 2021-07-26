@@ -1,0 +1,23 @@
+<ul class="pagination center">
+    {% if registros_tablas.has_previous %}
+    <li class="active">
+        <a href="?page=1">Primera </a>
+    </li>
+    <li class="waves-effect waves-teal ">
+        <a href="?page={{ registros_tablas.previous_page_number }}">&laquo;</a>
+    </li>
+    {% endif %}
+    {% for page in paginas %}
+    <li class="waves-effect waves-teal {% if paginactual == page %} active {% endif %} ">
+        <a href="?page={{  page }}">{{ page }} </a>
+    </li>
+    {% endfor %}
+    {% if registros_tablas.has_next %}
+    <li class="active">
+        <a href="?page={{  registros_tablas.next_page_number }}">&raquo; </a>
+    </li>
+    <li class="waves-effect waves-teal ">
+        <a href="?page={{ registros_tablas.paginator.num_pages }}">Ultima</a>
+    </li>
+    {% endif %}
+</ul>

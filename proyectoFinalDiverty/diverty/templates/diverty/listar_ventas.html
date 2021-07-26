@@ -1,0 +1,74 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}listado de ventas {% endblock %}
+
+{% block js %}
+<script>
+    function eliminarVenta(id) {
+        Swal.fire({
+            "title": "¿Estás seguro?",
+            "text": "esta accion no se puede deshacer",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "no,cancelar",
+            "confirmButtonText": "Sí,eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#F44339"
+
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_ventas/" + id + "/"
+                }
+            })
+    }
+</script>
+{% endblock %}
+{% block contenedor %}
+{% load humanize %}
+<main>
+    <h1 class="center-align">Listado de ventas</h1>
+    <a class="boton-crear-registro" href="{% url 'diverty:guardar-ventas' %}">
+        Crear ventas +</a>
+    {% if registros_tablas %}
+    <table class="stripped highlight centered responsive-table ">
+        <thead>
+            <tr class="grey lighten-2">
+                <th>Id Venta</th>
+                <th>Fecha</th>
+                <th>Coste</th>
+                <th>Cliente</th>
+                <th>Boleta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <br>
+        <tbody>
+            {% for registros in registros_tablas %}
+            <tr>
+                <td>{{ registros.id_venta }}</td>
+                <td>{{ registros.fecha }}</td>
+                <td>{{ registros.costo | intcomma }}</td>
+                <td>{{ registros.clientes }}</td>
+                <td>{{ registros.boletas }}</td>
+                <td>
+                    <a onclick="eliminarVenta ({{registros.id_venta}})" href="#" class="material-icons  red-text  ">
+                        delete
+                    </a>
+                    <a href="{% url 'diverty:modificar_ventas' registros.id_venta %}"
+                        class="material-icons yellow-text text-darken-4">
+                        mode_edit
+                    </a>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% else %}
+    No hay datos aun
+    {% endif %}
+    {% include 'diverty/paginator.html' %}
+</main>
+{% endblock %}

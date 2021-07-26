@@ -1,0 +1,21 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}Formulario de avisos {% endblock %}
+{% block contenedor %}
+{% load materializecss %}
+<div class="section container">
+  <h1 class="center-align black-text">Registro de avisos</h1>
+  <a class="black-text regresar" href="{% url 'diverty:listar_aviso' %}">&#x21a9; Regresar</a>
+  <div class="row">
+    <form class="col s12" method="POST" action="" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row card-panel">
+        {{ form| materializecss }}
+        <input type="reset" value="limpiar campos" class="btn ">
+        &nbsp;
+        <button type="submit" class="btn">Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

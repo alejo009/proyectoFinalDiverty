@@ -1,0 +1,21 @@
+{% extends 'diverty/base.html' %}
+{% load static %}
+{% block titulo %}Formulario de atracciones {% endblock %}
+{% block contenedor %}
+{% load materializecss %}
+<div class="section container">
+  <h1 class="center-align black-text">Registro de atracciones</h1>
+  <a class="black-text regresar" href="{% url 'diverty:listado_atracciones' %}">&#x21a9; Regresar</a>
+  <div class="row">
+    <form class="col s12" method="POST" action="">
+      {% csrf_token %}
+      <div class="row card-panel">
+        {{ form| materializecss }}
+        <input type="reset" value="limpiar campos" class="btn ">
+        &nbsp;
+        <button type="submit" class="btn">Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

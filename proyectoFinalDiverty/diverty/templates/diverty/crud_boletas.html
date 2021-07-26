@@ -1,0 +1,76 @@
+{% extends 'diverty/base.html' %}
+
+{% load static %}
+{% block js %}
+
+<script>
+    function eliminarProductos(id) {
+        Swal.fire({
+            "title": "Estás seguro?",
+            "text": "esta accion no se puede deshacer",
+            "icon": "warning",
+            "showCancelButton": true,
+            "cancelButtonText": "No,cancelar",
+            "confirmButtonText": "Si,eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#F44339"
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_productos/" + id + "/"
+                }
+            })
+    }
+</script>
+{% endblock %}
+
+
+{% block contenedor %}
+<main>
+    <h1 class="center-align">Listado de productos</h1>
+    <a class="boton-crear-registro" href="{% url 'diverty:guardar_productos' %}">Crear producto +</a>
+    {% if registros_tablas %}
+    <table class="stripped highlight centered responsive-table ">
+        <thead>
+            <tr class="grey lighten-2">
+                <th>Codigo</th>
+                <th>Producto</th>
+                <th>Foto</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <br>
+        {% for registros in registros_tablas %}
+        <tbody>
+            <tr>
+                <td>{{ registros.codigo_producto }}</td>
+                <td>{{ registros.nombre_boleta_producto }}</td>
+                {% if registros.foto %}
+                <td><img src="{{ registros.foto.url }}" alt=""width="70px" height="70px"></td>
+                {% endif %}
+                <td>{{ registros.precio }}</td>
+                <td>{{ registros.stock }}</td>
+                <td>
+                    <a  href="#" onclick="eliminarProductos ({{ registros.id }})"
+                        class="material-icons  red-text  ">
+                        delete
+                    </a>
+                    <a href="{% url 'diverty:modificar_productos' registros.id %}"
+                        class="material-icons yellow-text text-darken-4">
+                        mode_edit
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    No hay datos
+    {% endif %}
+    {% include 'diverty/paginator.html' %}
+</main>
+
+
+{% endblock %}
